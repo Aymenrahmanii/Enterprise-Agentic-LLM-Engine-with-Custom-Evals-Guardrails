@@ -1,0 +1,16 @@
+[
+  {
+    "id": "bench_001",
+    "query": "Show active users from database",
+    "target_tool": "sql_database_query",
+    "expected_sql": "SELECT * FROM users",
+    "target_schema": "RouterDecisionSchema"
+  },
+  {
+    "id": "bench_002",
+    "query": "Fetch system performance metrics",
+    "target_tool": "sql_database_query",
+    "expected_sql": "SELECT * FROM metrics",
+    "target_schema": "RouterDecisionSchema"
+  }
+]

@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  nexus-redis:
+    image: redis/redis-stack:7.2.0-v9
+    container_name: nexus-redis-vss
+    ports:
+      - "6379:6379"
+      - "8001:8001"  # RedisInsight UI
+    environment:
+      - REDIS_ARGS=--save 60 1 --loglevel notice
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  nexus-agent-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nexus-agent-core-api
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=nexus-redis
+      - REDIS_PORT=6379
+      - MOCK_MODE=true
+    depends_on:
+      nexus-redis:
+        condition: service_healthy
+
+volumes:
+  redis_data:

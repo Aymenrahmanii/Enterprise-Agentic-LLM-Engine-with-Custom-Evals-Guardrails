@@ -1,0 +1,43 @@
+app:
+  name: "NexusAgent-Core"
+  environment: "development"
+  debug: true
+  api_prefix: "/api/v1"
+  host: "0.0.0.0"
+  port: 8000
+
+engine:
+  model_name: "meta-llama/Meta-Llama-3.1-8B-Instruct"
+  tensor_parallel_size: 1
+  gpu_memory_utilization: 0.90
+  max_model_len: 8192
+  block_size: 16  # PagedAttention virtual block size
+  dtype: "auto"
+  quantization: "awq"
+  mock_mode: true  # Fallback for environments without CUDA/vLLM backend
+
+cache:
+  redis_host: "localhost"
+  redis_port: 6379
+  redis_db: 0
+  redis_password: ""
+  vector_dim: 384
+  distance_metric: "COSINE"
+  similarity_threshold: 0.92  # Tau threshold for hit/miss decision
+  cache_ttl: 86400  # 24 hours in seconds
+  hnsw_m: 16
+  hnsw_ef_construction: 200
+
+evals:
+  enabled: true
+  async_workers: 4
+  sampling_rate: 1.0
+  thresholds:
+    faithfulness: 0.85
+    schema_correctness: 0.994
+    hallucination: 0.05
+
+telemetry:
+  service_name: "nexus-agent-core"
+  otlp_endpoint: "http://localhost:4317"
+  enable_tracing: true
